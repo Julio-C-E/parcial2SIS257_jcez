@@ -12,7 +12,7 @@ async function bootstrap() {
   app.enableCors();
 
   const config = new DocumentBuilder()
-    .setTitle('Parcial 2 - José Fernando Alfaro Ayzama')
+    .setTitle('Parcial 2 | Julio Cesar Escobar')
     .setDescription('Segundo parcial de la asignatura Desarrollo de Aplicaciones Internet 2')
     .setVersion('1.0')
     .addTag('')
