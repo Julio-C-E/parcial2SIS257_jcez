@@ -15,12 +15,14 @@ const programasFiltrados = computed(() => {
   return programas.value.filter(
     (programa) =>
       programa.nombre.toLowerCase().includes(busqueda.value.toLowerCase()) ||
-      programa.nivelesacademico.nombre.toLowerCase().includes(busqueda.value.toLowerCase()),
+      programa.modalidadclases.toLowerCase().includes(busqueda.value.toLowerCase()),
   )
 })
 
-async function obtenerLista() {
-  programas.value = await http.get(ENDPOINT).then((response) => response.data)
+async function obtenerLista(filtro: string = '') {
+  programas.value = await http
+    .get(`${ENDPOINT}?parametro=${filtro}`)
+    .then((response) => response.data)
 }
 
 function emitirEdicion(programa: Programa) {
@@ -49,7 +51,12 @@ defineExpose({ obtenerLista })
     <div class="col-7 pl-0 mt-3">
       <InputGroup>
         <InputGroupAddon><i class="pi pi-search"></i></InputGroupAddon>
-        <InputText v-model="busqueda" type="text" placeholder="Buscar por nombre o descripcion" />
+        <InputText
+          v-model="busqueda"
+          type="text"
+          placeholder="Buscar por Modalidad de clases"
+          @input="obtenerLista(busqueda)"
+        />
       </InputGroup>
     </div>
 
@@ -65,6 +72,7 @@ defineExpose({ obtenerLista })
           <th>Costo</th>
           <th>Fecha de inico</th>
           <th>Estado</th>
+          <th>Modalidad de Clases</th>
           <th>Acciones</th>
         </tr>
       </thead>
@@ -79,6 +87,7 @@ defineExpose({ obtenerLista })
           <td>{{ programa.costo }}</td>
           <td>{{ programa.fechaInicio }}</td>
           <td>{{ programa.estado }}</td>
+          <td>{{ programa.modalidadclases }}</td>
           <td>
             <Button icon="pi pi-pencil" aria-label="Editar" text @click="emitirEdicion(programa)" />
             <Button

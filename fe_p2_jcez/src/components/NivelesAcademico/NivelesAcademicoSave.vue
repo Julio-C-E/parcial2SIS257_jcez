@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { NivelesAcademico } from '@/models/nivelesacademico'
 import http from '@/plugins/axios'
-import { Button, Dialog, InputText, Textarea } from 'primevue'
+import { Button, Dialog, Dropdown, InputText, Select, Textarea } from 'primevue'
 import { computed, ref, watch } from 'vue'
 
 const ENDPOINT = 'nivelesacademicos'
@@ -14,6 +14,14 @@ const props = defineProps({
   modoEdicion: Boolean,
 })
 const emit = defineEmits(['guardar', 'close'])
+
+const nombres = [
+  { label: 'Diplomado', value: 'Diplomado' },
+  { label: 'Especialidad', value: 'Especialidad' },
+  { label: 'Maestria', value: 'Maestria' },
+  { label: 'Doctorado', value: 'Doctorado' },
+]
+
 
 const dialogVisible = computed({
   get: () => props.mostrar,
@@ -60,11 +68,14 @@ async function handleSave() {
     >
       <div class="flex items-center gap-4 mb-4">
         <label for="nombre" class="font-semibold w-3">Nombre</label>
-        <InputText
+        <Dropdown
           id="nombre"
           v-model="nivelesacademico.nombre"
           class="flex-auto"
-          autocomplete="off"
+          :options="nombres"
+          optionLabel="label"
+          option-value="value"
+          placeholder="Seleccionar Nombre"
           autofocus
         />
       </div>

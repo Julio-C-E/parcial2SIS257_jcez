@@ -6,6 +6,7 @@ import {
   Button,
   Calendar,
   Dialog,
+  Dropdown,
   InputMask,
   InputNumber,
   InputText,
@@ -26,6 +27,17 @@ const props = defineProps({
 const emit = defineEmits(['guardar', 'close'])
 
 const nivelesacademicos = ref<NivelesAcademico[]>([])
+const modalidades = [
+  { label: 'Presencial', value: 'presencial' },
+  { label: 'Virtual', value: 'virtual' },
+  { label: 'Mixto', value: 'mixto' },
+]
+
+const estados = [
+  { label: 'En planificacion', value: 'En planificacion' },
+  { label: 'En Curso', value: 'En Curso' },
+  { label: 'Finalizado', value: 'Finalizado' },
+]
 
 const dialogVisible = computed({
   get: () => props.mostrar,
@@ -57,6 +69,7 @@ async function handleSave() {
       costo: programa.value.costo,
       fechaInicio: programa.value.fechaInicio,
       estado: programa.value.estado,
+      modalidadclases: programa.value.modalidadclases,
     }
     if (props.modoEdicion) {
       await http.patch(`${ENDPOINT}/${programa.value.id}`, body)
@@ -171,12 +184,27 @@ watch(
 
       <div class="flex items-center gap-4 mb-4">
         <label for="estado" class="font-semibold w-3">Estado</label>
-        <InputText
+        <<Dropdown
           id="estado"
           v-model="programa.estado"
+                    :options="estados"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Seleccionar Estado"
           class="flex-auto"
-          autocomplete="off"
-          row="4"
+        />
+      </div>
+      <div class="flex items-center gap-4 mb-4">
+        <label for="modalidadclases" class="font-semibold w-3">Modalidad de Clases</label>
+        <Dropdown
+          id="modalidadclases"
+          v-model="programa.modalidadclases"
+          :options="modalidades"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Seleccionar Modalidad"
+          class="flex-auto"
+          
         />
       </div>
       <div class="flex justify-end gap-2">
